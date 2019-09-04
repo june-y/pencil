@@ -18,6 +18,8 @@ class Pencil
       set_eraser_durability(string_to_erase)
       replace_with_ws(string_to_erase,on_paper)
       @logger.info("Current string is #{@on_paper}")
+      on_paper = @on_paper
+      return @on_paper
     elsif (@eraser_durability == 0)
       @logger.error("The eraser is worn out")
     else
@@ -58,9 +60,31 @@ class Pencil
     return @on_paper
   end
 
-  def edit_paper(on_object)
-
+  def edit_paper(string_to_add,on_paper)
+    str2_arr = on_paper.split('')
+    str1_arr = string_to_add.split('')
+    input_count = string_to_add.length
+    starting_position = on_paper.enum_for(:scan, /\s{2,}/).map { Regexp.last_match.begin(0) }
+    starting_index = (starting_position.join.to_i) +1 #for buffer ws
+    word_size = input_count
+    counter = 0
+    str2_arr[starting_index..-1].each do |char|
+        break if (counter == word_size)
+          if char.include?(" ") == true
+            char.replace(str1_arr[counter])
+          else
+            char.replace('@')
+          end #if else
+          counter += 1
+      end #do
+      final = str2_arr.join('')
+      @logger.info("Final string is #{final}")
+      return final
   end
+
+
+#what determines the final size of paper?
+
 
   def set_eraser_durability(string_to_erase)
     remove_count = (string_to_erase.strip.length)
@@ -81,17 +105,20 @@ class Pencil
     return @point_durability
   end
 
+
 end
+
 
 paper = "Lady bird"
 #paper2 = "How much wood would a woodchuck chuck if a woodchuck could chuck wood?"
 numbertwo = Pencil.new(200,50,3)
-#p paper
-#numbertwo.write("    bird",paper)
-#numbertwo.use_eraser("ird",paper)
-#numbertwo.use_eraser("chuck",paper2)
-#p paper2
-
-
-
-#create the edit fucntion
+#write1 = numbertwo.write("    bird",paper)
+#erase1 = numbertwo.use_eraser("ird",write1)
+#erase2 = numbertwo.use_eraser("ird",erase1)
+paper2 = "An       a day keeps the doctor away"
+#numbertwo.edit_paper("onion",paper2)
+#p "****"
+#numbertwo.edit_paper("oniooonnn",paper2)
+#p edit1
+numbertwo.edit_paper("artichoke",paper2)
+numbertwo.edit_paper("onion", paper2)
