@@ -3,8 +3,6 @@ require 'pencil'
 RSpec.describe Pencil do
   let(:numbertwo) { Pencil.new(200,50,3) }
 
-
-
   context "when something needs to be written" do
     it "can be written" do
       paper = "Lady"
@@ -12,7 +10,6 @@ RSpec.describe Pencil do
       expect(result).to eq("Lady    bird")
     end
   end
-
 
   context "when something needs to be erased" do
     it "can use the eraser converting to whitespace" do
@@ -82,6 +79,15 @@ RSpec.describe Pencil do
     end
   end
 
+    context "when pencil point is changed by writing" do
+    it "and the point is low, it will write to 0 then replace unwritten letters with whitespace" do
+      low_point = Pencil.new(5,50,3)
+      paper = ""
+      result = low_point.write("buzzing",paper)
+      expect(result).to eq("buzzi  ")
+    end
+  end
+
 
     context "when pencil point is changed by writing" do
     it "will degrade by two with capitals, and one for lowercase" do
@@ -106,8 +112,5 @@ RSpec.describe Pencil do
       expect(result).to eq("An artich@k@ay keeps the doctor away")
     end
   end
-
-#notes: does punctuation,and symbols count in cost of eraser and point?
-#
 
 end

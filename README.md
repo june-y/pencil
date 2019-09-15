@@ -1,3 +1,59 @@
+#Pencil Durability Kata
+
+##Installation
+Assumptions: You downloaded this from my github account
+
+
+
+##Usage
+
+The program was developed with ruby 2.5.3p105 and Rspec 3.8
+
+To run the program (on a command line)
+ruby lib/pencil.rb
+
+I have added commented 'main' section that can be used to play with the functions. I'm assuming the proofs provided by tests would remove the need to run the code.
+Essentially you create a pencil object, with the three parameters: Point length, eraser length, and pencil length. The idea of a piece of paper is represented by strings, so Pencils can only interact with string objects. You use the pencil object you have created like this
+
+numbertwo = Pencil.new(100,25,4)
+
+and you have a piece of paper like this
+
+paper = "Lady"
+
+and then you use a method of the pencil. There are methods like use_eraser,write, edit that can be used to alter the paper.
+numbertwo.write("    bird",paper)
+
+would return "Lady    bird", for example. There are also methods that are used to implement an aspect of the those other methods, like replace_with_ws, set_eraser_durability etc. You will probably not explicitly use these methods, but you are welcome to break them, or use them in other methods you imagine. The methods you are most likely to use, and how they should be used is below.
+
+
+Write:
+
+numbertwo = Pencil.new(150,50,3)
+paper = "The quick brown fox"
+numbertwo.write("jumps over the lazy dog",paper) #"The quick brown fox jumps over the lazy dog"
+
+Edit paper:  Only works if there is a whitespace block.
+
+paper = paper = "An       a day keeps the doctor away"
+numbertwo.edit_paper("apple", paper)
+
+Use eraser:
+
+paper = "How much wood would a woodchuck chuck if a woodchuck could chuck wood?"
+numbertwo.use_eraser("chuck",paper) # "How much wood would a woodchuck chuck if a woodchuck could       wood?"
+
+Sharpen:
+numbertwo.sharpen() #this will change point durability to the original value used when created. Needed when point durability is low
+
+You cannot use the eraser once eraser_durability is 0 nor can you used the pencil when pencil_length is 0.
+
+
+To run the tests (on a command line)
+rspec spec/pencil_spec.rb
+
+##thoughts throughout kata development
+
 Pencil object
 paper object
 
@@ -25,7 +81,7 @@ how would I describe the edit function?
 In the real world, editting is erase and write over and over
 sometimes there are issues of the finite size of a paper
 
-here, I feel like the dit function only applies after something has been erased
+here, I feel like the edit function only applies after something has been erased
 OR there is sizeable whitespace. Therefore I am applying the rule that in order to edit
 there must be whitespace on each side.
 

@@ -1,9 +1,6 @@
 class Pencil
-  #include Paper
   require 'logger'
   attr_accessor :eraser_durability,:point_durability,:pencil_length,:on_paper
-
-
 
   def initialize(point_input, eraser_input,length_input)
     @eraser_durability = eraser_input
@@ -109,8 +106,6 @@ class Pencil
       @writability = (@point_durability - adding_count).abs
       viable_string = to_write.split(//).last(@writability).join("")
       to_write.chomp!(viable_string)
-
-      #p to_write
       @point_durability = 0
       @logger.info("Point is worn out")
       return to_write
@@ -128,3 +123,9 @@ class Pencil
     return @point_durability
   end
 end
+
+
+
+#new_pencil = Pencil.new(150,50,3)
+#paper = ""
+#new_pencil.write("buzzing",paper)
