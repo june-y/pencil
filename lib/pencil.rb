@@ -5,7 +5,7 @@ class Pencil
 
 
 
-  def initialize(eraser_input, point_input,length_input)
+  def initialize(point_input, eraser_input,length_input)
     @eraser_durability = eraser_input
     @point_durability = point_input
     @initial_point = point_input
@@ -14,22 +14,27 @@ class Pencil
   end
 
   def use_eraser(string_to_erase,on_paper)
-    if (string_to_erase.respond_to?(:to_str))
+    if (string_to_erase.respond_to?(:to_str) == false)
+      @logger.error("You can only input strings")
+    else
       set_eraser_durability(string_to_erase)
       replace_with_ws(string_to_erase,on_paper)
       @logger.info("Current string is #{@on_paper}")
       on_paper = @on_paper
       return @on_paper
-    elsif (@eraser_durability == 0)
-      @logger.error("The eraser is worn out")
-    else
-      @logger.error("You can only input strings")
     end
   end
 
   def write(to_write,on_paper)
     if (to_write.respond_to?(:to_str))
-      set_point_durability(to_write)
+      adding_count = (to_write.strip.length)
+      if (adding_count > @point_durability)
+        set_point_durability(to_write)
+        ws_amount = " " * @writability
+        to_write = to_write + ws_amount
+      else
+        set_point_durability(to_write)
+      end
       paper_string = on_paper + to_write
       @on_paper = paper_string
       @logger.info("Point is #{@point_durability}")
@@ -83,42 +88,43 @@ class Pencil
   end
 
 
-#what determines the final size of paper?
-
-
   def set_eraser_durability(string_to_erase)
     remove_count = (string_to_erase.strip.length)
-    @eraser_durability = @eraser_durability - remove_count
-    @logger.info("Eraser has #{@eraser_durability} chars left")
+    if (remove_count > @eraser_durability)
+      erasability = (@eraser_durability - remove_count).abs
+      viable_string = string_to_erase.slice!(0,erasability)
+      string_to_erase = viable_string
+      @eraser_durability = 0
+      @logger.info("Eraser is worn out")
+      return string_to_erase
+    else
+      @eraser_durability = @eraser_durability - remove_count
+      @logger.info("Eraser has #{@eraser_durability} chars left")
+    end
   end
 
   def set_point_durability(to_write)
-    added_array = to_write.strip.split('')
+    adding_count = (to_write.strip.length)
+    if (adding_count > @point_durability)
+      @writability = (@point_durability - adding_count).abs
+      viable_string = to_write.split(//).last(@writability).join("")
+      to_write.chomp!(viable_string)
+
+      #p to_write
+      @point_durability = 0
+      @logger.info("Point is worn out")
+      return to_write
+    end
+    added_array = to_write.split('')
     added_array.each do |char|
       if (char =~ /[A-Z]/)
         @point_durability = @point_durability - 2
-      else ()
+      elsif (char == " ")
+      else
         @point_durability = @point_durability - 1
       end
     end
     @logger.info("Point is #{@point_durability}")
     return @point_durability
   end
-
-
 end
-
-
-paper = "Lady bird"
-#paper2 = "How much wood would a woodchuck chuck if a woodchuck could chuck wood?"
-numbertwo = Pencil.new(200,50,3)
-#write1 = numbertwo.write("    bird",paper)
-#erase1 = numbertwo.use_eraser("ird",write1)
-#erase2 = numbertwo.use_eraser("ird",erase1)
-paper2 = "An       a day keeps the doctor away"
-#numbertwo.edit_paper("onion",paper2)
-#p "****"
-#numbertwo.edit_paper("oniooonnn",paper2)
-#p edit1
-numbertwo.edit_paper("artichoke",paper2)
-numbertwo.edit_paper("onion", paper2)

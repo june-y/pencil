@@ -72,3 +72,24 @@ one word at a time.
 ..
 
 changing to sub should fix the issue of replacing all of the white space
+
+~~
+
+need to finish the tests. Originally I wanted a paper object,
+but I don't think that that is necessary anymore
+a pencil in this case is a sort of string editor, I think
+
+
+~~
+
+and so here I am considering how to handle point durability when the point is smaller than the character amount
+Is every unavailable character a space? Because in a way, that seems incorrect to me.
+doing so would mean that you could end up with a large array, of emptiness
+there is a data cost to that at some point. Do i add one additional space to say
+"you're out of pencil, but heres one little space where the rest of your string was supposed to be"
+or why put whitespace at all? in a way, if you have a large whitespace then you have the option
+of editing the paper, which might not have been true if i gave 1 or less whitespaces.
+That would encourage people to use my string editor in a way non-intended,
+with no disregard to the amounts left in your point
+
+anyways set it to replace all extra chars with whitespace
